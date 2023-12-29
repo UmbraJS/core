@@ -40,11 +40,10 @@ const cssVariable = computed(() => {
 })
 
 const textColor = computed(() => {
-  const black = colord('#000000')
-  const white = colord('#ffffff')
+  const black = '#000000'
+  const white = '#ffffff'
   if (!props.color) return black
-  const c = colord(props.color)
-  const x = mostReadable(c, [black, white]).toHex()
+  const x = mostReadable(props.color, [black, white])
   return x
 })
 

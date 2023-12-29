@@ -30,13 +30,14 @@ function getRange({ from, to, range }: GetRange) {
 }
 
 function accentRange(adjusted: UmbraAdjusted, range: (number | string)[], color?: string) {
-  const { background, foreground } = adjusted
-  if (!color) return getRange({ from: background, to: foreground, range })
+  const from = colord(adjusted.background)
+  const to = colord(adjusted.foreground)
+  if (!color) return getRange({ from, to, range })
 
   const defaultRange = adjusted.input.settings.shades || []
-  const shades = getRange({ from: background, to: foreground, range: defaultRange })
+  const shades = getRange({ from, to, range: defaultRange })
   const normalizedRange = normalizeRange({ range: range, shades, color: colord(color) })
-  return getRange({ from: background, to: foreground, range: normalizedRange })
+  return getRange({ from, to, range: normalizedRange })
 }
 
 function accents(adjusted: UmbraAdjusted) {
@@ -47,9 +48,7 @@ function accents(adjusted: UmbraAdjusted) {
     const color = plainColor ? plainColor : plainRange ? getStrings(plainRange)[0] : undefined
     const range = plainRange ? plainRange : defaultShades
     const name = typeof accent === 'string' ? undefined : accent.name
-
-    const c = color ? colord(color) : undefined
-    const fallback = c ? c : adjusted.foreground
+    const fallback = color ? color : adjusted.foreground
     return {
       name: name ? name : `accent`,
       background: fallback,
@@ -65,7 +64,7 @@ interface RangeValues {
 }
 
 function rangeValues(adjusted: UmbraAdjusted, scheme?: RangeValues) {
-  const { background } = adjusted
+  const background = colord(adjusted.background)
   const shades = scheme?.shades || []
   const tints = scheme?.tints || shades
   return background.isDark() ? shades : tints
@@ -73,12 +72,14 @@ function rangeValues(adjusted: UmbraAdjusted, scheme?: RangeValues) {
 
 function base(adjusted: UmbraAdjusted) {
   const { background, foreground } = adjusted
+  const from = colord(background)
+  const to = colord(foreground)
   const range = rangeValues(adjusted, adjusted.input.settings)
   return {
     name: 'base',
     background,
     foreground,
-    shades: getRange({ from: background, to: foreground, range })
+    shades: getRange({ from, to, range })
   }
 }
 

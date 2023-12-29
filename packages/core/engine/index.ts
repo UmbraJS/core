@@ -48,19 +48,19 @@ export function umbra(scheme = defaultScheme, passedSettings = settings) {
 
   const readability = input.settings.readability || 4
   const accents = scheme.accents || []
-  const background = colord(scheme.background)
+  const background = scheme.background //colord(scheme.background)
   const foreground = getReadable({
     foreground: colord(scheme.foreground),
     background,
     readability
-  })
+  }).toHex()
 
-  return umbraHydrate(
-    umbraGenerate({
-      input,
-      background,
-      foreground,
-      accents
-    })
-  )
+  const adjusted = {
+    input,
+    background,
+    foreground,
+    accents
+  }
+
+  return umbraHydrate(umbraGenerate(adjusted))
 }

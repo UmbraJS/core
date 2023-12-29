@@ -43,8 +43,8 @@ export interface UmbraInput {
 }
 
 export interface UmbraAdjusted {
-  background: Colord
-  foreground: Colord
+  background: string
+  foreground: string
   accents: (Accent | string)[]
   input: UmbraInput
 }

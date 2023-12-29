@@ -85,17 +85,14 @@ const increaseContrast = ({ color, contrast, val = 100 }: MoveAwayFrom) => {
     : color.darken(val)
 }
 
-export function mostReadable(color: Colord, colors: Colord[]) {
+export function mostReadable(color: string, colors: string[]) {
   const readable = colors.map((c) => Math.abs(getReadability(color, c)))
   const index = readable.indexOf(Math.max(...readable))
   return colors[index]
 }
 
-export const pickContrast = (color: Colord, scheme: UmbraAdjusted) => {
-  return mostReadable(color, [
-    scheme.background || colord('white'),
-    scheme.foreground || colord('black')
-  ])
+export const pickContrast = (color: string, scheme: UmbraAdjusted) => {
+  return mostReadable(color, [scheme.background || 'white', scheme.foreground || 'black'])
 }
 
 export function colorMix(from: string | Colord, to: string | Colord, percent = 50) {
